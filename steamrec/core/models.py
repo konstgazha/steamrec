@@ -34,3 +34,17 @@ class Tag(models.Model):
 class GameTag(models.Model):
     game = models.ForeignKey(Game)
     tag = models.ForeignKey(Tag)
+
+
+class Player(models.Model):
+    steamid = models.CharField(max_length=128, unique=True)
+    game_count = models.IntegerField(blank=True, null=True)
+    public = models.BooleanField(default=True)
+    avatar = models.CharField(max_length=128)
+    avatarmedium = models.CharField(max_length=128)
+    avatarfull = models.CharField(max_length=128)
+    date_added = models.DateField(auto_now_add=True)
+    date_modified = models.DateField(auto_now_add=True, auto_now=True)
+
+    def __str__(self):
+        return str(self.steamid)
