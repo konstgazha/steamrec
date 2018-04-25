@@ -10,10 +10,14 @@ class SeleniumCrawler:
         self.wait_n_seconds = 5
         self.driver = None
 
-    def parse_elems_by_class(self, class_name):
-        return self.driver.find_elements_by_class_name(class_name)
+    def parse_elems_by_class(self, class_name, driver=None):
+        if not driver:
+            driver = self.driver
+        return driver.find_elements_by_class_name(class_name)
     
-    def parse_elems_by_xpath(self, xpath):
+    def parse_elems_by_xpath(self, xpath, driver=None):
+        if not driver:
+            driver = self.driver
         return self.driver.find_elements(By.XPATH, xpath)
 
     def wait_loading_by_class(self, class_name):
