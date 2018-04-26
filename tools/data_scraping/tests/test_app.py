@@ -22,6 +22,15 @@ class TestGameParsingMethods(unittest.TestCase):
                 total_review_score = review_scores[0].get_attribute("data-tooltip-text")
         self.assertTrue(recent_review_score or total_review_score)
 
+    def test_get_release_date(self):
+        xpath = "//div[@class='date']"
+        try:
+            release_date = crawler.parse_elems_by_xpath(xpath)[0].text
+        except:
+            release_date = ''
+        self.assertTrue(release_date)
+
+
 if __name__ == '__main__':
     unittest.main(exit=False)
 
