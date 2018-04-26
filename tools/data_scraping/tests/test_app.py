@@ -5,16 +5,22 @@ import crawlers
 
 crawler = crawlers.SeleniumCrawler()
 crawler.open()
+url = 'https://store.steampowered.com/app/221380/Age_of_Empires_II_HD/'
+crawler.driver.get(url)
 
 class TestGameParsingMethods(unittest.TestCase):
-    def test_get_recent_reviews_score(self):
-        url = 'https://store.steampowered.com/app/221380/Age_of_Empires_II_HD/'
-        crawler.driver.get(url)
-        review_score_block = crawler.parse_elems_by_xpath("//div[@class='user_reviews']")
-        if review_score_block:
-            review_scores = crawler.parse_elems_by_xpath("//span[contains(@class, 'game_review_summary')]", review_score_block[0])
-        recent_review_score = review_scores[0].text.strip()
-        self.assertEqual(recent_review_score, 'Очень положительные')
+    def test_get_reviews_score(self):
+        xpath = "//div[@class='user_reviews_summary_row']"
+        review_scores = crawler.parse_elems_by_xpath(xpath)
+        recent_review_score = ''
+        total_review_score = ''
+        if review_scores:
+            if len(review_scores) == 2:
+                recent_review_score = review_scores[0].get_attribute("data-tooltip-text")
+                total_review_score = review_scores[1].get_attribute("data-tooltip-text")
+            else:
+                total_review_score = review_scores[0].get_attribute("data-tooltip-text")
+        self.assertTrue(recent_review_score or total_review_score)
 
 if __name__ == '__main__':
     unittest.main(exit=False)
