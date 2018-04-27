@@ -30,6 +30,13 @@ class TestGameParsingMethods(unittest.TestCase):
             release_date = ''
         self.assertTrue(release_date)
 
+    def test_get_developers(self):
+        xpath = "//div[@id='developers_list']"
+        try:
+            developers = crawler.parse_elems_by_xpath(xpath)[0].text
+        except:
+            developers = ''
+        self.assertTrue(developers)
 
 if __name__ == '__main__':
     unittest.main(exit=False)
