@@ -7,6 +7,7 @@ crawler = crawlers.SeleniumCrawler()
 crawler.open()
 url = 'https://store.steampowered.com/app/221380/Age_of_Empires_II_HD/'
 crawler.driver.get(url)
+crawler.wait_loading_by_class('user_reviews')
 
 class TestGameParsingMethods(unittest.TestCase):
     def test_get_reviews_score(self):
@@ -32,7 +33,9 @@ class TestGameParsingMethods(unittest.TestCase):
 
     def test_get_developers(self):
         xpath = "//div[@id='developers_list']"
+        more_btn = "//div[@class='more_btn']"
         try:
+            crawler.parse_elems_by_xpath(more_btn)[0].click()
             developers = crawler.parse_elems_by_xpath(xpath)[0].text
         except:
             developers = ''
