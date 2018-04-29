@@ -41,6 +41,17 @@ class TestGameParsingMethods(unittest.TestCase):
             developers = ''
         self.assertTrue(developers)
 
+    def test_get_tags(self):
+        xpath = "//a[@class='app_tag']"
+        try:
+            tag_elems = crawler.parse_elems_by_xpath(xpath)
+        except:
+            tag_elems = ''
+        tags = []
+        for tag in tag_elems:
+            tags.append(tag.text)
+        self.assertNotEqual(tags, [])
+
 if __name__ == '__main__':
     unittest.main(exit=False)
 
