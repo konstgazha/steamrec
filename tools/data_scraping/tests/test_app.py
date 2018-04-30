@@ -42,12 +42,15 @@ class TestGameParsingMethods(unittest.TestCase):
         self.assertTrue(developers)
 
     def test_get_tags(self):
-        xpath = "//a[@class='app_tag']"
+        xpath = "//div[@class='app_tag_control popular']/a[@class='app_tag']"
+        more_btn = "//div[@class='app_tag add_button']"
         try:
+            crawler.parse_elems_by_xpath(more_btn)[0].click()
             tag_elems = crawler.parse_elems_by_xpath(xpath)
         except:
             tag_elems = ''
         tags = []
+        print(tags)
         for tag in tag_elems:
             tags.append(tag.text)
         self.assertNotEqual(tags, [])
