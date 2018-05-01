@@ -50,10 +50,21 @@ class TestGameParsingMethods(unittest.TestCase):
         except:
             tag_elems = ''
         tags = []
-        print(tags)
         for tag in tag_elems:
             tags.append(tag.text)
         self.assertNotEqual(tags, [])
+
+    def test_details_specs(self):
+        xpath = "//div[@class='game_area_details_specs']"
+        try:
+            details_specs_elems = crawler.parse_elems_by_xpath(xpath)
+        except:
+            details_specs_elems = ''
+        details_specs = []
+        for elem in details_specs_elems:
+            details_specs.append(elem.text)
+        print(details_specs)
+        self.assertNotEqual(details_specs, [])
 
 if __name__ == '__main__':
     unittest.main(exit=False)
