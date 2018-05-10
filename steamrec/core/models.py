@@ -1,10 +1,15 @@
 from django.db import models
 
 
+class AppType(models.Model):
+    name = models.CharField(max_length=128)
+    display_name = models.CharField(max_length=128)
+
+
 class Game(models.Model):
     appid = models.IntegerField(unique=True)
     name = models.CharField(max_length=128)
-    app_type = models.ForeignKey(AppType)
+    app_type = models.ForeignKey(AppType, on_delete=models.CASCADE)
     release_date = models.DateField(blank=True, null=True)
     header_image_url = models.URLField(blank=True, null=True)
     developer = models.CharField(max_length=128)
@@ -22,18 +27,13 @@ class Game(models.Model):
         return self.name
 
 
-class AppType(models.Model):
-    name = models.CharField(max_length=128)
-    display_name = models.CharField(max_length=128)
-
-
 class Tag(models.Model):
     name = models.CharField(max_length=128)
 
 
 class GameTag(models.Model):
-    game = models.ForeignKey(Game)
-    tag = models.ForeignKey(Tag)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
 
 class Player(models.Model):
