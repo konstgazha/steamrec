@@ -3,6 +3,10 @@ from datetime import datetime
 
 from .models import AppType, App, Tag, AppTag
 
+def lists_difference(new_list, old_list):
+    old_list = set(old_list)
+    return [item for item in new_list if item not in old_list]
+
 
 class GameModelTest(TestCase):
     def setUp(self):
@@ -32,3 +36,14 @@ class GameModelTest(TestCase):
         app_ids = AppTag.objects.filter(tag__name="action").values_list('app', flat=True)
         apps = [App.objects.get(id=app_id) for app_id in app_ids]
         self.assertEqual(len(apps), 1)
+
+    def test_update_app_tags(self):
+        app = App.objects.get(appid=730)
+        app_tags = AppTag.objects.filter(app=app.id).values_list('tag__name', flat=True)
+        new_tags = ["FPS", "Shooter"]
+        for tag_name in lists_difference(new_tags, app_tags):
+            tag, created = Tag.objects.get_or_create(name=tag_name)
+            AppTag.objects.create(app=app, tag=tag)
+        self.assertEqual(len(AppTag.objects.filter(app=app)), 3)
+
+
