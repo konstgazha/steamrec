@@ -1,5 +1,5 @@
 from django.test import TestCase
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .models import AppType, App, Tag, AppTag
 
@@ -37,7 +37,7 @@ class GameModelTest(TestCase):
         apps = [App.objects.get(id=app_id) for app_id in app_ids]
         self.assertEqual(len(apps), 1)
 
-    def test_create_new_apps(self):
+    def test_filter_and_create_new_apps(self):
         appids = App.objects.all().values_list('appid', flat=True)
         new_appids = [730, 440]
         app_objs = []
@@ -60,4 +60,9 @@ class GameModelTest(TestCase):
             tag = Tag.objects.create(name=tag_name)
             AppTag.objects.create(app=app, tag=tag)
         self.assertEqual(len(AppTag.objects.filter(app=app)), 3)
+
+    def test_get_apps_for_update(self):
+        update_threshold = datetime.now() - timedelta(days=1)
+        apps = App.objects.filter(date_modified__gte=update_threshold)
+        self.assertEqual(len(apps), 1)
 
