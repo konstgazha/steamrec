@@ -13,7 +13,7 @@ class TestTotalApps(unittest.TestCase):
         self.url_all_apps_by_release = 'https://store.steampowered.com/search/?sort_by=Released_DESC&page={}'
 
     def test_get_all_apps_urls_on_page(self):
-        xpath = "//a[@class='search_result_row ds_collapse_flag app_impression_tracked']"
+        xpath = "//a[contains(@class, 'search_result_row')]" #[contains(@class, 'btnX')
         crawler.driver.get(self.url_all_apps_by_release.format(1))
         apps_urls = crawler.parse_elems_by_xpath(xpath)
         self.assertEqual(len(apps_urls), 25)
