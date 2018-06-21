@@ -1,10 +1,7 @@
 import unittest
 import sys
 sys.path.append('../')
-import game_crawler, crawlers
-
-crawler = crawlers.SeleniumCrawler()
-crawler.open()
+import game_crawler
 
 
 class TestTotalApps(unittest.TestCase):
@@ -13,12 +10,11 @@ class TestTotalApps(unittest.TestCase):
         self.url_all_apps_by_release = 'https://store.steampowered.com/search/?sort_by=Released_DESC&page={}'
 
     def test_get_all_apps_urls_on_page(self):
-        xpath = "//a[contains(@class, 'search_result_row')]" #[contains(@class, 'btnX')
-        crawler.driver.get(self.url_all_apps_by_release.format(1))
-        apps_urls = crawler.parse_elems_by_xpath(xpath)
+        total_apps = game_crawler.TotalApps()
+        total_apps.open()
+        apps_urls = total_apps.test_get_all_apps_urls_on_page(self.url_all_apps_by_release.format(1))
+        total_apps.close()
         self.assertEqual(len(apps_urls), 25)
 
 if __name__ == '__main__':
     unittest.main(exit=False)
-
-crawler.close()

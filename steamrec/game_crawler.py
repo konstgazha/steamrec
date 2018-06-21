@@ -64,9 +64,22 @@ class GameCrawler(SeleniumCrawler):
             details_specs.append(elem.text)
         return details_specs
 
-url = 'https://store.steampowered.com/app/221380/Age_of_Empires_II_HD/'
-gc = GameCrawler()
-gc.open()
-gc.redirect(url)
-gc.get_list_details_specs()
-gc.close()
+
+class TotalApps(SeleniumCrawler):
+    def __init__(self):
+        super().__init__()
+
+    def test_get_all_apps_urls_on_page(self, url):
+        xpath = "//a[contains(@class, 'search_result_row')]"
+        self.driver.get(url)
+        apps_urls = self.parse_elems_by_xpath(xpath)
+        return apps_urls
+
+# url = 'https://store.steampowered.com/app/221380/Age_of_Empires_II_HD/'
+# gc = GameCrawler()
+# gc.open()
+# gc.redirect(url)
+# gc.get_list_details_specs()
+# gc.close()
+
+url_all_apps_by_release = 'https://store.steampowered.com/search/?sort_by=Released_DESC&page={}'
