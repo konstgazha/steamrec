@@ -1,4 +1,5 @@
 import sys
+import re
 from crawlers import SeleniumCrawler
 
 
@@ -9,18 +10,32 @@ class GameCrawler(SeleniumCrawler):
     def redirect(self, url):
         self.driver.get(url)
 
-    def get_reviews_score(self):
+    def get_recent_review_score(self):
+        """Return the tuple of recent review score and number of votes"""
         xpath = "//div[@class='user_reviews_summary_row']"
         review_scores = self.parse_elems_by_xpath(xpath)
         recent_review_score = ''
-        total_review_score = ''
         if review_scores:
             if len(review_scores) == 2:
                 recent_review_score = review_scores[0].get_attribute("data-tooltip-text")
+                recent_review_score = re.sub(',', '', recent_review_score)
+                recent_review_score = tuple([int(i) for i in re.findall(r'\d+', recent_review_score)])[:-1]
+        return recent_review_score
+
+    def get_total_review_score(self):
+        """Return the tuple of total review score and number of votes"""
+        xpath = "//div[@class='user_reviews_summary_row']"
+        review_scores = self.parse_elems_by_xpath(xpath)
+        total_review_score = ''
+        if review_scores:
+            if len(review_scores) == 2:
                 total_review_score = review_scores[1].get_attribute("data-tooltip-text")
             else:
                 total_review_score = review_scores[0].get_attribute("data-tooltip-text")
-        return (total_review_score, recent_review_score)
+            total_review_score = re.sub(',', '', total_review_score)
+            total_review_score = tuple([int(i) for i in re.findall(r'\d+', total_review_score)])
+        return total_review_score
+
 
     def get_release_date(self):
         xpath = "//div[@class='date']"
